@@ -13,12 +13,19 @@ class RoleMiddleware
         Closure $next,
         ...$roles
     ): Response {
+
         if (!auth()->check()) {
             abort(401);
         }
 
-        if (!in_array(auth()->user()->role->name, $roles)) {
-            abort(403);
+        $user = $request->user();
+
+        if (!$user->role) {
+            abort(403, 'No role assigned to this account.');
+        }
+
+        if (!in_array($user->role->name, $roles)) {
+            abort(403, 'You are not authorized to access this page.');
         }
 
         return $next($request);

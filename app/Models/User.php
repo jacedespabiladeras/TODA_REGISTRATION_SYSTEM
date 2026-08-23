@@ -13,16 +13,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
+
+
 class User extends Authenticatable
 {
+    use Notifiable;
 
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role_id',
+    ];
 
-    public function role(): BelongsTo
-{
-    return $this->belongsTo(Role::class);
-}
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /**
      * Get the attributes that should be cast.
