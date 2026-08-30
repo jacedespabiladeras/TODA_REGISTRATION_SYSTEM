@@ -62,16 +62,30 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
+    // Profile Settings
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
+    // Update name, email and profile picture
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
+    // Change password
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])
+        ->name('profile.password');
+
+
+    // Settings
+    Route::get('/settings', function () {
+        return view('settings.index');
+    })->name('settings');
+
+     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
 });
+
+
 
 
 /*
