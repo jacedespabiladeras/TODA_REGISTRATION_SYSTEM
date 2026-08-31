@@ -231,9 +231,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin', [\App\Http\Controllers\DashboardController::class, 'index'])
+        ->name('admin.dashboard');
 
 
     /*
@@ -278,8 +277,7 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/staff', function () {
-        return view('staff.dashboard');
-    })->name('staff.dashboard');
+    Route::get('/staff', [\App\Http\Controllers\DashboardController::class, 'index'])
+        ->name('staff.dashboard');
 
 });
