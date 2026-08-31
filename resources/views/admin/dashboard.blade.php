@@ -136,7 +136,41 @@
                             Inactive Operators
                             <span class="stat-badge stat-badge-inactive">Inactive</span>
                         </div>
-                        <div class="stat-card-value">{{ $stats['operators']['inactive'] }}</div>
+                    </div>
+                </div>
+
+                {{-- VEHICLES OVERVIEW --}}
+                <div class="section-group-title">
+                    <i class="bi bi-car-front"></i> Vehicles Overview
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card stat-card-total">
+                        <div class="stat-card-label">
+                            Total Vehicles
+                            <span class="stat-badge stat-badge-total">All</span>
+                        </div>
+                        <div class="stat-card-value">{{ $stats['vehicles']['total'] }}</div>
+                    </div>
+                    <div class="stat-card stat-card-active">
+                        <div class="stat-card-label">
+                            Active Vehicles
+                            <span class="stat-badge stat-badge-active">Active</span>
+                        </div>
+                        <div class="stat-card-value">{{ $stats['vehicles']['active'] }}</div>
+                    </div>
+                    <div class="stat-card stat-card-expiring">
+                        <div class="stat-card-label">
+                            Expiring Vehicles
+                            <span class="stat-badge stat-badge-expiring">30 Days</span>
+                        </div>
+                        <div class="stat-card-value">{{ $stats['vehicles']['expiring'] }}</div>
+                    </div>
+                    <div class="stat-card stat-card-inactive">
+                        <div class="stat-card-label">
+                            Inactive Vehicles
+                            <span class="stat-badge stat-badge-inactive">Expired</span>
+                        </div>
+                        <div class="stat-card-value">{{ $stats['vehicles']['inactive'] }}</div>
                     </div>
                 </div>
 
@@ -205,7 +239,7 @@
                                             <tr>
                                                 <td>
                                                     <span class="badge-type-{{ strtolower($item['type']) }}">
-                                                        <i class="bi {{ $item['type'] === 'Driver' ? 'bi-person-vcard' : 'bi-file-earmark-text' }}"></i>
+                                                        <i class="bi {{ $item['type'] === 'Driver' ? 'bi-person-vcard' : ($item['type'] === 'Vehicle' ? 'bi-car-front' : 'bi-file-earmark-text') }}"></i>
                                                         {{ $item['type'] }}
                                                     </span>
                                                 </td>

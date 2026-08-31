@@ -8,7 +8,7 @@
                 <button id="sidebarToggle" class="sidebar-toggle" type="button">
                     <i class="bi bi-list"></i>
                 </button>
-                <h1 class="page-title">Driver Registration</h1>
+                <h1 class="page-title">Vehicle Registration</h1>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="text-muted small d-none d-md-block">
@@ -44,7 +44,7 @@
                 {{-- SEARCH & FILTER PANEL --}}
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body p-4">
-                        <form method="GET" action="{{ route('drivers.index') }}" class="row g-3">
+                        <form method="GET" action="{{ route('vehicles.index') }}" class="row g-3">
                             <div class="col-md-5">
                                 <div class="input-group">
                                     <span class="input-group-text bg-white border-end-0 text-muted">
@@ -54,7 +54,7 @@
                                         type="text" 
                                         name="search" 
                                         class="form-control border-start-0 ps-0" 
-                                        placeholder="Search by name, driver ID, license, contact..." 
+                                        placeholder="Search plate, engine, chassis, driver, operator..." 
                                         value="{{ request('search') }}"
                                     >
                                 </div>
@@ -71,82 +71,94 @@
                                 <button type="submit" class="btn btn-primary px-4" style="background-color: #0b2342; border-color: #0b2342;">
                                     Filter
                                 </button>
-                                <a href="{{ route('drivers.index') }}" class="btn btn-outline-secondary px-3">
+                                <a href="{{ route('vehicles.index') }}" class="btn btn-outline-secondary px-3">
                                     Reset
                                 </a>
-                                <a href="{{ route('drivers.create') }}" class="btn btn-success ms-auto px-3 d-flex align-items-center gap-2">
-                                    <i class="bi bi-plus-lg"></i> Add New Driver
+                                <a href="{{ route('vehicles.create') }}" class="btn btn-success ms-auto px-3 d-flex align-items-center gap-2">
+                                    <i class="bi bi-plus-lg"></i> Register Vehicle
                                 </a>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                {{-- DRIVERS TABLE --}}
+                {{-- VEHICLES TABLE --}}
                 <div class="card border-0 shadow-sm">
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0" style="font-size: 14px;">
                                 <thead class="table-light">
                                     <tr style="border-bottom: 2px solid #dee2e6;">
-                                        <th class="ps-4 py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Driver ID</th>
-                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Full Name</th>
-                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Contact</th>
-                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">License No.</th>
+                                        <th class="ps-4 py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Vehicle ID</th>
+                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Plate No.</th>
+                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Make / Model / Color</th>
+                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Driver Assignment</th>
+                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Operator Assignment</th>
                                         <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Expiration</th>
                                         <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Status</th>
-                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Date Registered</th>
                                         <th class="py-3 text-uppercase text-muted text-end pe-4" style="font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($drivers as $driver)
+                                    @forelse($vehicles as $vehicle)
                                         @php
                                             $statusText = 'Active';
-                                            $badgeClass = 'bg-success-subtle text-success border border-success-subtle';
                                             $today = now()->startOfDay();
-                                            $expiration = $driver->license_expiration ? \Carbon\Carbon::parse($driver->license_expiration)->startOfDay() : null;
+                                            $expiration = $vehicle->registration_expiration ? \Carbon\Carbon::parse($vehicle->registration_expiration)->startOfDay() : null;
 
-                                            if ($driver->status === 'inactive') {
+                                            if ($vehicle->status === 'inactive') {
                                                 $statusText = 'Inactive';
-                                                $badgeClass = 'bg-danger-subtle text-danger border border-danger-subtle';
                                             } elseif ($expiration) {
                                                 if ($expiration->lt($today)) {
                                                     $statusText = 'Inactive';
-                                                    $badgeClass = 'bg-danger-subtle text-danger border border-danger-subtle';
                                                 } elseif ($expiration->diffInDays($today) <= 30) {
                                                     $statusText = 'Expiring';
-                                                    $badgeClass = 'bg-warning-subtle text-warning-emphasis border border-warning-subtle';
                                                 }
                                             }
                                         @endphp
                                         <tr style="border-bottom: 1px solid #e9ecef;">
                                             <td class="ps-4">
-                                                <strong>{{ $driver->driver_id }}</strong>
+                                                <strong>{{ $vehicle->vehicle_id }}</strong>
+                                            </td>
+                                            <td><code>{{ $vehicle->plate_number }}</code></td>
+                                            <td>
+                                                <div class="fw-bold">{{ $vehicle->make }} {{ $vehicle->model }}</div>
+                                                <div class="text-muted small">{{ $vehicle->color ?? 'No Color' }} • {{ $vehicle->vehicle_type ?? 'Unspecified' }}</div>
                                             </td>
                                             <td>
-                                                <div class="fw-bold">{{ $driver->first_name }} {{ $driver->middle_name ? $driver->middle_name . ' ' : '' }}{{ $driver->last_name }}</div>
-                                                <div class="text-muted small" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                                    {{ $driver->address }}
-                                                </div>
+                                                @if($vehicle->driver)
+                                                    <a href="{{ route('drivers.show', $vehicle->driver->id) }}" class="text-decoration-none fw-semibold">
+                                                        {{ $vehicle->driver->first_name }} {{ $vehicle->driver->last_name }}
+                                                    </a>
+                                                    <div class="text-muted small">{{ $vehicle->driver->driver_id }}</div>
+                                                @else
+                                                    <span class="text-muted small italic">Unassigned</span>
+                                                @endif
                                             </td>
-                                            <td>{{ $driver->contact_number }}</td>
-                                            <td><code>{{ $driver->license_number }}</code></td>
                                             <td>
-                                                {{ $driver->license_expiration ? \Carbon\Carbon::parse($driver->license_expiration)->format('M d, Y') : 'None' }}
+                                                @if($vehicle->operator)
+                                                    <a href="{{ route('operators.show', $vehicle->operator->id) }}" class="text-decoration-none fw-semibold">
+                                                        {{ $vehicle->operator->first_name }} {{ $vehicle->operator->last_name }}
+                                                    </a>
+                                                    <div class="text-muted small">{{ $vehicle->operator->operator_id }}</div>
+                                                @else
+                                                    <span class="text-muted small italic">Unassigned</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $vehicle->registration_expiration ? \Carbon\Carbon::parse($vehicle->registration_expiration)->format('M d, Y') : 'None' }}
                                             </td>
                                             <td>
                                                 <span class="badge px-2.5 py-1.5 text-uppercase" style="font-size: 11px; font-weight: 600; border-radius: 6px; {{ $statusText === 'Active' ? 'background-color: #d1e7dd; color: #0f5132;' : ($statusText === 'Expiring' ? 'background-color: #fff3cd; color: #664d03;' : 'background-color: #f8d7da; color: #842029;') }}">
                                                     {{ $statusText }}
                                                 </span>
                                             </td>
-                                            <td>{{ $driver->created_at->format('M d, Y') }}</td>
                                             <td class="text-end pe-4">
                                                 <div class="d-flex justify-content-end gap-1.5">
-                                                    <a href="{{ route('drivers.show', $driver->id) }}" class="btn btn-sm btn-outline-primary" title="View Profile">
+                                                    <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-sm btn-outline-primary" title="View Details">
                                                         <i class="bi bi-eye"></i> View
                                                     </a>
-                                                    <a href="{{ route('drivers.edit', $driver->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit Info">
+                                                    <a href="{{ route('vehicles.edit', $vehicle->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit Info">
                                                         <i class="bi bi-pencil"></i> Edit
                                                     </a>
                                                     @if(auth()->user()->role?->name === 'admin')
@@ -155,13 +167,13 @@
                                                             class="btn btn-sm btn-outline-danger" 
                                                             title="Delete Record"
                                                             data-bs-toggle="modal" 
-                                                            data-bs-target="#deleteModal{{ $driver->id }}"
+                                                            data-bs-target="#deleteModal{{ $vehicle->id }}"
                                                         >
                                                             <i class="bi bi-trash"></i> Delete
                                                         </button>
 
                                                         {{-- DELETE MODAL --}}
-                                                        <div class="modal fade" id="deleteModal{{ $driver->id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
+                                                        <div class="modal fade" id="deleteModal{{ $vehicle->id }}" tabindex="-1" aria-hidden="true" style="text-align: left;">
                                                             <div class="modal-dialog modal-dialog-centered">
                                                                 <div class="modal-content border-0 shadow-lg">
                                                                     <div class="modal-header bg-danger text-white">
@@ -172,13 +184,13 @@
                                                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body p-4">
-                                                                        <p class="mb-1">Are you sure you want to delete this driver?</p>
-                                                                        <h6 class="text-dark fw-bold">{{ $driver->first_name }} {{ $driver->last_name }} ({{ $driver->driver_id }})</h6>
+                                                                        <p class="mb-1">Are you sure you want to delete this vehicle?</p>
+                                                                        <h6 class="text-dark fw-bold">Plate: {{ $vehicle->plate_number }} (ID: {{ $vehicle->vehicle_id }})</h6>
                                                                         <p class="text-muted small mt-2 mb-0">This action cannot be undone and will permanently remove this record from the database.</p>
                                                                     </div>
                                                                     <div class="modal-footer bg-light">
                                                                         <button type="button" class="btn btn-secondary px-3" data-bs-dismiss="modal">Cancel</button>
-                                                                        <form method="POST" action="{{ route('drivers.destroy', $driver->id) }}" class="d-inline">
+                                                                        <form method="POST" action="{{ route('vehicles.destroy', $vehicle->id) }}" class="d-inline">
                                                                             @csrf
                                                                             @method('DELETE')
                                                                             <button type="submit" class="btn btn-danger px-3">
@@ -196,8 +208,8 @@
                                     @empty
                                         <tr>
                                             <td colspan="8" class="text-center py-5 text-muted">
-                                                <i class="bi bi-people-fill display-6 d-block mb-3 text-muted" style="opacity: 0.3;"></i>
-                                                No drivers found.
+                                                <i class="bi bi-car-front display-6 d-block mb-3 text-muted" style="opacity: 0.3;"></i>
+                                                No vehicles registered.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -209,7 +221,7 @@
 
                 {{-- PAGINATION --}}
                 <div class="mt-4">
-                    {{ $drivers->links() }}
+                    {{ $vehicles->links() }}
                 </div>
 
             </div>

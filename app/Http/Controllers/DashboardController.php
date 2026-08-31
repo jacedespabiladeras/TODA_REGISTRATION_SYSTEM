@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\Operator;
 use App\Models\Franchise;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -54,6 +55,32 @@ class DashboardController extends Controller
         $inactiveOperators = Operator::where('status', 'inactive')->count();
 
         // -------------------------------------------------------------
+        // VEHICLES STATISTICS
+        // -------------------------------------------------------------
+        $totalVehicles = Vehicle::count();
+
+        $activeVehicles = Vehicle::where('status', 'active')
+            ->where(function($query) use ($warningDate) {
+                $query->whereNull('registration_expiration')
+                      ->orWhere('registration_expiration', '>', $warningDate);
+            })
+            ->count();
+
+        $expiringVehicles = Vehicle::where('status', 'active')
+            ->whereNotNull('registration_expiration')
+            ->whereBetween('registration_expiration', [$today, $warningDate])
+            ->count();
+
+        $inactiveVehicles = Vehicle::where(function($query) use ($today) {
+            $query->where('status', 'inactive')
+                  ->orWhere(function($q) use ($today) {
+                      $q->where('status', 'active')
+                        ->whereNotNull('registration_expiration')
+                        ->where('registration_expiration', '<', $today);
+                  });
+        })->count();
+
+        // -------------------------------------------------------------
         // FRANCHISES STATISTICS
         // -------------------------------------------------------------
         $totalFranchises = Franchise::count();
@@ -75,7 +102,7 @@ class DashboardController extends Controller
         })->count();
 
         // -------------------------------------------------------------
-        // UPCOMING EXPIRATIONS LIST (Drivers & Franchises)
+        // UPCOMING EXPIRATIONS LIST (Drivers, Vehicles & Franchises)
         // -------------------------------------------------------------
         $expiringDriversList = Driver::where('status', 'active')
             ->whereNotNull('license_expiration')
@@ -87,6 +114,22 @@ class DashboardController extends Controller
                 return [
                     'type' => 'Driver',
                     'name_id' => $driver->first_name . ' ' . $driver->last_name . ' (' . $driver->driver_id . ')',
+                    'expiration_date' => $expiration->format('M. d, Y'),
+                    'days_remaining' => $daysRemaining,
+                    'status' => 'Expiring'
+                ];
+            });
+
+        $expiringVehiclesList = Vehicle::where('status', 'active')
+            ->whereNotNull('registration_expiration')
+            ->whereBetween('registration_expiration', [$today, $warningDate])
+            ->get()
+            ->map(function($vehicle) {
+                $expiration = Carbon::parse($vehicle->registration_expiration);
+                $daysRemaining = now()->startOfDay()->diffInDays($expiration->startOfDay(), false);
+                return [
+                    'type' => 'Vehicle',
+                    'name_id' => $vehicle->plate_number . ' (' . $vehicle->vehicle_id . ')',
                     'expiration_date' => $expiration->format('M. d, Y'),
                     'days_remaining' => $daysRemaining,
                     'status' => 'Expiring'
@@ -109,7 +152,9 @@ class DashboardController extends Controller
             });
 
         // Combine and sort by days remaining ascending
-        $upcomingExpirations = $expiringDriversList->concat($expiringFranchisesList)
+        $upcomingExpirations = $expiringDriversList
+            ->concat($expiringVehiclesList)
+            ->concat($expiringFranchisesList)
             ->sortBy('days_remaining')
             ->values();
 
@@ -126,6 +171,12 @@ class DashboardController extends Controller
                 'active' => $activeOperators,
                 'expiring' => $expiringOperators,
                 'inactive' => $inactiveOperators,
+            ],
+            'vehicles' => [
+                'total' => $totalVehicles,
+                'active' => $activeVehicles,
+                'expiring' => $expiringVehicles,
+                'inactive' => $inactiveVehicles,
             ],
             'franchises' => [
                 'total' => $totalFranchises,

@@ -16,4 +16,9 @@ class Operator extends Model
         'email',
         'status',
     ];
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }

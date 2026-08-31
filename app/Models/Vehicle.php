@@ -17,5 +17,17 @@ class Vehicle extends Model
         'vehicle_type',
         'registration_expiration',
         'status',
+        'driver_id',
+        'operator_id',
     ];
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
+
+    public function operator()
+    {
+        return $this->belongsTo(Operator::class);
+    }
 }

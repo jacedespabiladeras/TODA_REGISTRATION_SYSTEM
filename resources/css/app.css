@@ -889,6 +889,16 @@ body {
     display: inline-block;
 }
 
+.badge-type-vehicle {
+    background-color: #e1f5fe;
+    color: #0288d1;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
 .badge-days-left {
     font-weight: 700;
     font-size: 11px;

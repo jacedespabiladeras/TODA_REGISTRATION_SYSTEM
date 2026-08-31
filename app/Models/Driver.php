@@ -17,4 +17,9 @@ class Driver extends Model
         'license_expiration',
         'status',
     ];
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
 }
