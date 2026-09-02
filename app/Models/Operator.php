@@ -21,4 +21,9 @@ class Operator extends Model
     {
         return $this->hasMany(Vehicle::class);
     }
+
+    public function franchises()
+    {
+        return $this->hasMany(Franchise::class);
+    }
 }

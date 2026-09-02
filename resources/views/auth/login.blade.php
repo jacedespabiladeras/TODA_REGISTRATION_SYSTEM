@@ -40,8 +40,7 @@
             height: 200px;
             object-fit: contain;
             margin-bottom: 10px;
-            margin-left: 110px;
-           
+            
         }
 
         .city-name {

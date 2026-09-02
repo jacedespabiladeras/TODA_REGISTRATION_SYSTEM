@@ -30,4 +30,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Operator::class);
     }
+
+    public function franchises()
+    {
+        return $this->hasMany(Franchise::class);
+    }
 }

@@ -262,13 +262,21 @@ body {
    ARROW
 ========================================================= */
 
-.arrow {
+.arrow,
+.sidebar-arrow {
 
-    font-size: 12px !important;
+    font-size: 11px !important;
+
+    width: auto !important;
 
     transition: transform .2s ease;
 
     margin-left: auto;
+}
+
+.sidebar-link[aria-expanded="true"] .sidebar-arrow {
+
+    transform: rotate(180deg);
 }
 
 
@@ -276,7 +284,8 @@ body {
    SUBMENU
 ========================================================= */
 
-.submenu {
+.submenu,
+.sidebar-submenu {
 
     padding-left: 15px;
 
@@ -599,6 +608,8 @@ body {
 .sidebar.collapsed .sidebar-link span,
 .sidebar.collapsed .menu-title,
 .sidebar.collapsed .user-info,
+.sidebar.collapsed .sidebar-arrow,
+.sidebar.collapsed .arrow,
 .sidebar.collapsed .logout-btn span {
 
     display: none;

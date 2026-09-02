@@ -5,6 +5,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\FranchiseController;
+use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\MemberController;
 
 use Illuminate\Support\Facades\Route;
@@ -174,6 +175,12 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
         FranchiseController::class
     );
 
+    Route::get('/franchises/{franchise}/renew', [RenewalController::class, 'renew'])
+        ->name('franchises.renew');
+
+    Route::post('/franchises/{franchise}/renew', [RenewalController::class, 'processRenewal'])
+        ->name('franchises.renew.process');
+
 
     /*
     |--------------------------------------------------------------
@@ -181,9 +188,8 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/renewals', function () {
-        return view('renewals.index');
-    })->name('renewals.index');
+    Route::get('/renewals', [RenewalController::class, 'index'])
+        ->name('renewals.index');
 
 
     /*

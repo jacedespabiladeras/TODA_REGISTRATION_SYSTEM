@@ -106,16 +106,16 @@
         </a>
 
 
-        {{-- =================================================
-             FRANCHISE
-        ================================================== --}}
+        @php
+            $isFranchiseActive = request()->routeIs('franchises.*') || request()->routeIs('renewals.*');
+        @endphp
 
         <a
             href="#franchiseMenu"
-            class="sidebar-link"
+            class="sidebar-link {{ $isFranchiseActive ? 'active' : '' }}"
             data-bs-toggle="collapse"
             role="button"
-            aria-expanded="false"
+            aria-expanded="{{ $isFranchiseActive ? 'true' : 'false' }}"
             aria-controls="franchiseMenu"
         >
 
@@ -131,7 +131,7 @@
 
 
         <div
-            class="collapse sidebar-submenu"
+            class="collapse sidebar-submenu {{ $isFranchiseActive ? 'show' : '' }}"
             id="franchiseMenu"
         >
 
@@ -139,10 +139,11 @@
 
             <a
                 href="{{ route('franchises.index') }}"
-                class="sidebar-sublink"
+                class="sidebar-sublink {{ request()->routeIs('franchises.*') ? 'active fw-bold' : '' }}"
+                style="{{ request()->routeIs('franchises.*') ? 'color: #0b2342; font-weight: 700;' : '' }}"
             >
 
-                <i class="bi bi-dot"></i>
+                <i class="bi bi-dot {{ request()->routeIs('franchises.*') ? 'text-primary' : '' }}"></i>
 
                 Franchise Registration
 
@@ -153,10 +154,11 @@
 
             <a
                 href="{{ route('renewals.index') }}"
-                class="sidebar-sublink"
+                class="sidebar-sublink {{ request()->routeIs('renewals.*') ? 'active fw-bold' : '' }}"
+                style="{{ request()->routeIs('renewals.*') ? 'color: #0b2342; font-weight: 700;' : '' }}"
             >
 
-                <i class="bi bi-dot"></i>
+                <i class="bi bi-dot {{ request()->routeIs('renewals.*') ? 'text-primary' : '' }}"></i>
 
                 Franchise Renewal
 
