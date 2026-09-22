@@ -1,5 +1,8 @@
+@php
+    $userTheme = auth()->check() ? (auth()->user()->theme ?? 'light') : 'light';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="{{ $userTheme }}" class="{{ $userTheme === 'dark' ? 'dark' : '' }}">
 
 <head>
 
@@ -12,6 +15,56 @@
     <title>
         Sorsogon City Government Portal
     </title>
+
+    <script>
+        (function() {
+            var theme = "{{ $userTheme }}";
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
+        window.setAppTheme = function(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (document.body) {
+                document.body.setAttribute('data-theme', theme);
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    document.body.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.body.classList.remove('dark');
+                }
+            }
+            
+            // Persist to user account in backend
+            var csrfTokenEl = document.querySelector('meta[name="csrf-token"]');
+            var csrfToken = csrfTokenEl ? csrfTokenEl.getAttribute('content') : '';
+            
+            if (csrfToken) {
+                fetch("{{ route('settings.preferences.update') }}", {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ theme: theme })
+                }).catch(function(err) {
+                    console.error('Error saving theme preference:', err);
+                });
+            }
+        };
+
+        window.toggleAppTheme = function() {
+            var current = document.documentElement.getAttribute('data-theme') || 'light';
+            var target = (current === 'dark') ? 'light' : 'dark';
+            window.setAppTheme(target);
+        };
+    </script>
 
 
     <!-- =========================================
@@ -58,10 +111,10 @@
 </head>
 
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased {{ $userTheme === 'dark' ? 'dark' : '' }}" data-theme="{{ $userTheme }}">
 
 
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen app-canvas">
 
 
         <!-- =====================================

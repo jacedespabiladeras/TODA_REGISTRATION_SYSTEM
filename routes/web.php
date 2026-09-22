@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\FranchiseController;
 use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\ReportController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -57,31 +60,45 @@ Route::get('/dashboard', function () {
 
 /*
 |--------------------------------------------------------------------------
-| PROFILE
+| SETTINGS & PROFILE
 |--------------------------------------------------------------------------
+|
+| Accessible to all authenticated users (Admin and Staff).
+|
 */
 
 Route::middleware('auth')->group(function () {
 
-    // Profile Settings
+    // Settings Hub (Profile & Preferences)
+    Route::get('/settings', [SettingsController::class, 'index'])
+        ->name('settings');
+
+    Route::patch('/settings/profile', [SettingsController::class, 'updateProfile'])
+        ->name('settings.profile.update');
+
+    Route::delete('/settings/profile/photo', [SettingsController::class, 'removePhoto'])
+        ->name('settings.profile.photo.remove');
+
+    Route::patch('/settings/password', [SettingsController::class, 'updatePassword'])
+        ->name('settings.password.update');
+
+    Route::patch('/settings/preferences', [SettingsController::class, 'updatePreferences'])
+        ->name('settings.preferences.update');
+
+    // Profile Routes (backward compatibility)
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
-    // Update name, email and profile picture
-    Route::patch('/profile', [ProfileController::class, 'update'])
+    Route::patch('/profile', [SettingsController::class, 'updateProfile'])
         ->name('profile.update');
 
-    // Change password
-    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])
+    Route::delete('/profile/photo', [SettingsController::class, 'removePhoto'])
+        ->name('profile.photo.remove');
+
+    Route::patch('/profile/password', [SettingsController::class, 'updatePassword'])
         ->name('profile.password');
 
-
-    // Settings
-    Route::get('/settings', function () {
-        return view('settings.index');
-    })->name('settings');
-
-     Route::delete('/profile', [ProfileController::class, 'destroy'])
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
 });
@@ -198,9 +215,8 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/tracking', function () {
-        return view('tracking.index');
-    })->name('tracking.index');
+    Route::get('/tracking', [TrackingController::class, 'index'])
+        ->name('tracking.index');
 
 
     /*
@@ -209,9 +225,8 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/reports', function () {
-        return view('reports.index');
-    })->name('reports.index');
+    Route::get('/reports', [ReportController::class, 'index'])
+        ->name('reports.index');
 
 });
 
@@ -259,9 +274,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     |--------------------------------------------------------------
     */
 
-    Route::get('/reports/output', function () {
-        return view('admin.reports-output');
-    })->name('reports.output');
+    Route::get('/reports/output', [ReportController::class, 'output'])
+        ->name('reports.output');
 
 });
 

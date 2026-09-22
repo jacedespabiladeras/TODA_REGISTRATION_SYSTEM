@@ -45,6 +45,8 @@
 
                 </span>
 
+                <x-user-menu />
+
             </div>
 
         </header>

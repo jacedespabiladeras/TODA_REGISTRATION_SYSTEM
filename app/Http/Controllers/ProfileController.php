@@ -11,13 +11,11 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     /**
-     * Show profile settings
+     * Show profile settings (redirect to Settings profile tab)
      */
     public function edit(Request $request)
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return redirect()->route('settings', ['tab' => 'profile']);
     }
 
 
@@ -127,5 +125,27 @@ class ProfileController extends Controller
             'status',
             'Password changed successfully.'
         );
+    }
+
+
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request)
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        \Illuminate\Support\Facades\Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
     }
 }

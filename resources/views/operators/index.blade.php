@@ -17,6 +17,7 @@
                 <span class="badge bg-primary">
                     {{ auth()->user()->role?->name === 'admin' ? 'Administrator' : 'Staff' }}
                 </span>
+                <x-user-menu />
             </div>
         </header>
 

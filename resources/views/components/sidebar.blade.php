@@ -199,6 +199,22 @@
         </a>
 
 
+        {{-- SETTINGS --}}
+
+        <a
+            href="{{ route('settings') }}"
+            class="sidebar-link {{ request()->routeIs('settings*') || request()->routeIs('profile*') ? 'active' : '' }}"
+        >
+
+            <i class="bi bi-gear"></i>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+
 
         {{-- =================================================
              ADMINISTRATION
@@ -249,10 +265,43 @@
 
 
     {{-- =====================================================
-         LOGOUT
+         USER PROFILE & LOGOUT
     ====================================================== --}}
 
     <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+            @if(auth()->user()->profile_picture)
+
+                <img
+                    src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
+                    class="user-avatar"
+                    alt="{{ auth()->user()->name }}"
+                >
+
+            @else
+
+                <div class="user-avatar">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+
+            @endif
+
+            <div class="user-info">
+
+                <strong>
+                    {{ auth()->user()->name }}
+                </strong>
+
+                <small>
+                    {{ auth()->user()->role?->name === 'admin' ? 'Administrator' : 'Staff' }}
+                </small>
+
+            </div>
+
+        </div>
+
 
         <form
             method="POST"

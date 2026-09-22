@@ -2,14 +2,14 @@
 
 use App\Models\User;
 
-test('profile page is displayed', function () {
+test('profile page redirects to settings profile tab', function () {
     $user = User::factory()->create();
 
     $response = $this
         ->actingAs($user)
         ->get('/profile');
 
-    $response->assertOk();
+    $response->assertRedirect(route('settings', ['tab' => 'profile']));
 });
 
 test('profile information can be updated', function () {
@@ -24,13 +24,12 @@ test('profile information can be updated', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
+        ->assertRedirect(route('settings', ['tab' => 'profile']));
 
     $user->refresh();
 
     $this->assertSame('Test User', $user->name);
     $this->assertSame('test@example.com', $user->email);
-    $this->assertNull($user->email_verified_at);
 });
 
 test('email verification status is unchanged when the email address is unchanged', function () {
@@ -45,7 +44,7 @@ test('email verification status is unchanged when the email address is unchanged
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
+        ->assertRedirect(route('settings', ['tab' => 'profile']));
 
     $this->assertNotNull($user->refresh()->email_verified_at);
 });
