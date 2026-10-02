@@ -115,7 +115,6 @@ class RenewalController extends Controller
             'renewal_date' => 'required|date',
             'new_expiration_date' => 'required|date|after:' . ($franchise->expiration_date ? $franchise->expiration_date->toDateString() : 'today'),
             'reference_number' => 'nullable|string|max:100',
-            'renewal_fee' => 'nullable|numeric|min:0',
             'remarks' => 'nullable|string|max:1000',
         ], [
             'new_expiration_date.after' => 'The new expiration date must be later than the current expiration date (' . ($franchise->expiration_date ? $franchise->expiration_date->format('M d, Y') : 'today') . ').',
@@ -129,7 +128,6 @@ class RenewalController extends Controller
                 'new_expiration_date' => $request->new_expiration_date,
                 'renewal_date' => $request->renewal_date,
                 'reference_number' => $request->reference_number,
-                'renewal_fee' => $request->renewal_fee,
                 'remarks' => $request->remarks,
                 'processed_by' => auth()->id(),
             ]);

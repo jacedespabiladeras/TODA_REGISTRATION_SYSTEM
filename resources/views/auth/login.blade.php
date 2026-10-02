@@ -6,7 +6,7 @@
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
             background: #f4f6f8;
-            color: #333;
+            color: #0f172a;
         }
 
         .government-page {
@@ -46,19 +46,21 @@
         .city-name {
             font-size: 25px;
             font-weight: 700;
-            color: #174a7c;
+            color: #0b2342;
             margin: 0;
         }
 
         .city-government {
             font-size: 14px;
-            color: #666;
+            color: #334155;
+            font-weight: 600;
             margin-top: 3px;
         }
 
         .portal-name {
-            font-size: 13px;
-            color: #888;
+            font-size: 13.5px;
+            color: #475569;
+            font-weight: 500;
             margin-top: 10px;
         }
 
@@ -68,7 +70,7 @@
 
         .login-card {
             background: white;
-            border: 1px solid #ddd;
+            border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 30px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -81,14 +83,15 @@
 
         .login-heading h2 {
             font-size: 22px;
-            font-weight: 600;
-            color: #333;
+            font-weight: 700;
+            color: #0b2342;
             margin: 0;
         }
 
         .login-heading p {
-            font-size: 13px;
-            color: #777;
+            font-size: 13.5px;
+            color: #475569;
+            font-weight: 500;
             margin-top: 6px;
         }
 
@@ -103,8 +106,8 @@
         .login-label {
             display: block;
             font-size: 14px;
-            font-weight: 500;
-            color: #555;
+            font-weight: 600;
+            color: #0f172a;
             margin-bottom: 6px;
         }
 
@@ -113,21 +116,27 @@
             height: 43px;
             box-sizing: border-box;
 
-            border: 1px solid #ced4da;
+            border: 1px solid #cbd5e1;
             border-radius: 5px;
 
             padding: 8px 12px;
             font-size: 14px;
+            font-weight: 500;
 
             background: white;
-            color: #333;
+            color: #0f172a;
 
             outline: none;
         }
 
+        .login-input::placeholder {
+            color: #64748b;
+            opacity: 1;
+        }
+
         .login-input:focus {
-            border-color: #2878b5;
-            box-shadow: 0 0 0 3px rgba(40, 120, 181, 0.12);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
         /* =========================
@@ -152,7 +161,7 @@
             border: none;
             background: transparent;
 
-            color: #777;
+            color: #475569;
 
             cursor: pointer;
             font-size: 16px;
@@ -175,8 +184,9 @@
             align-items: center;
             gap: 7px;
 
-            font-size: 13px;
-            color: #666;
+            font-size: 13.5px;
+            color: #334155;
+            font-weight: 500;
         }
 
         .remember-checkbox {
@@ -188,19 +198,19 @@
             border: none;
             border-radius: 5px;
 
-            background: #2878b5;
+            background: #0b2342;
             color: white;
 
             padding: 9px 22px;
 
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
 
             cursor: pointer;
         }
 
         .login-button:hover {
-            background: #216696;
+            background: #17395f;
         }
 
         /* =========================
@@ -212,8 +222,9 @@
 
             margin-top: 20px;
 
-            font-size: 13px;
-            color: #2878b5;
+            font-size: 13.5px;
+            color: #1d4ed8;
+            font-weight: 600;
 
             text-decoration: none;
         }
@@ -229,14 +240,16 @@
 
             margin-top: 20px;
 
-            font-size: 13px;
-            color: #666;
+            font-size: 13.5px;
+            color: #1d4ed8;
+            font-weight: 600;
 
             text-decoration: none;
         }
 
         .home-link:hover {
-            color: #2878b5;
+            color: #1e40af;
+            text-decoration: underline;
         }
 
         /* =========================
@@ -248,12 +261,14 @@
 
             margin-top: 22px;
 
-            font-size: 12px;
-            color: #888;
+            font-size: 12.5px;
+            color: #475569;
+            font-weight: 500;
         }
 
         .government-footer a {
-            color: #2878b5;
+            color: #1d4ed8;
+            font-weight: 600;
             text-decoration: none;
         }
 
@@ -266,14 +281,16 @@
         ========================= */
 
         .error-message {
-            color: #dc3545;
-            font-size: 12px;
+            color: #dc2626;
+            font-size: 12.5px;
+            font-weight: 600;
             margin-top: 5px;
         }
 
         .status-message {
-            color: #198754;
-            font-size: 13px;
+            color: #15803d;
+            font-size: 13.5px;
+            font-weight: 600;
             margin-bottom: 15px;
         }
 

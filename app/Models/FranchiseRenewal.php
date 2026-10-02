@@ -13,7 +13,6 @@ class FranchiseRenewal extends Model
         'new_expiration_date',
         'renewal_date',
         'reference_number',
-        'renewal_fee',
         'remarks',
         'processed_by',
     ];
@@ -22,7 +21,6 @@ class FranchiseRenewal extends Model
         'previous_expiration_date' => 'date',
         'new_expiration_date' => 'date',
         'renewal_date' => 'date',
-        'renewal_fee' => 'decimal:2',
     ];
 
     public function franchise(): BelongsTo

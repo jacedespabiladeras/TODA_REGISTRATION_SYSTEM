@@ -238,14 +238,46 @@ class DatabaseSeeder extends Seeder
             'status' => 'active',
         ]);
 
-        // 4. Inactive Franchise (Explicitly cancelled)
-        Franchise::create([
-            'franchise_number' => 'FR-2026-0004',
-            'operator_id' => $operator2->id,
-            'vehicle_id' => $vehicle4->id,
-            'franchise_date' => $today->copy()->subMonths(6)->toDateString(),
-            'expiration_date' => $today->copy()->addDays(40)->toDateString(),
-            'status' => 'cancelled',
-        ]);
+        // -------------------------------------------------------------
+        // SEED INITIAL TO DO'S
+        // -------------------------------------------------------------
+        $staffUserFound = User::where('email', 'perez@gmail.com')->orWhere('role_id', 2)->first() ?? $staffUser;
+        $adminUserFound = User::where('email', 'despabiladeras@gmail.com')->orWhere('role_id', 1)->first() ?? $adminUser;
+
+        if (\App\Models\Todo::count() === 0 && $staffUserFound && $adminUserFound) {
+            \App\Models\Todo::create([
+                'title' => 'Verify driver registration records',
+                'description' => 'Review and cross-check newly submitted driver licenses and TODA clearance records.',
+                'assigned_to' => $staffUserFound->id,
+                'week_start' => $today->copy()->startOfWeek(\Carbon\Carbon::MONDAY)->toDateString(),
+                'week_end' => $today->copy()->endOfWeek(\Carbon\Carbon::SUNDAY)->toDateString(),
+                'deadline' => $today->copy()->addDays(3)->toDateString(),
+                'status' => 'pending',
+                'created_by' => $adminUserFound->id,
+            ]);
+
+            \App\Models\Todo::create([
+                'title' => 'Update vehicle registration records',
+                'description' => 'Ensure plate numbers and motor numbers match LTO registration files.',
+                'assigned_to' => $staffUserFound->id,
+                'week_start' => $today->copy()->startOfWeek(\Carbon\Carbon::MONDAY)->toDateString(),
+                'week_end' => $today->copy()->endOfWeek(\Carbon\Carbon::SUNDAY)->toDateString(),
+                'deadline' => $today->copy()->addDays(4)->toDateString(),
+                'status' => 'completed',
+                'completed_at' => now()->subDay(),
+                'created_by' => $adminUserFound->id,
+            ]);
+
+            \App\Models\Todo::create([
+                'title' => 'Process expiring franchise renewals',
+                'description' => 'Contact operators with franchises expiring within 30 days and assist in renewal submission.',
+                'assigned_to' => $staffUserFound->id,
+                'week_start' => $today->copy()->startOfWeek(\Carbon\Carbon::MONDAY)->toDateString(),
+                'week_end' => $today->copy()->endOfWeek(\Carbon\Carbon::SUNDAY)->toDateString(),
+                'deadline' => $today->copy()->addDays(5)->toDateString(),
+                'status' => 'pending',
+                'created_by' => $adminUserFound->id,
+            ]);
+        }
     }
 }

@@ -26,8 +26,6 @@ return new class extends Migration
 
             $table->string('reference_number')->nullable();
 
-            $table->decimal('renewal_fee', 10, 2)->nullable();
-
             $table->text('remarks')->nullable();
 
             $table->foreignId('processed_by')

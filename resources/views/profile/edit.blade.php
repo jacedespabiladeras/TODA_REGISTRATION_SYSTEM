@@ -5,6 +5,7 @@
         body {
             background: #f4f6f8;
             font-family: Arial, Helvetica, sans-serif;
+            color: #0f172a;
         }
 
         .profile-container {
@@ -15,7 +16,7 @@
 
         .profile-header {
             background: white;
-            border-left: 5px solid #174a7c;
+            border-left: 5px solid #0b2342;
             padding: 25px;
             margin-bottom: 20px;
             border-radius: 6px;
@@ -24,33 +25,38 @@
 
         .profile-header h1 {
             margin: 0;
-            color: #174a7c;
+            color: #0b2342;
             font-size: 26px;
+            font-weight: 700;
         }
 
         .profile-header p {
             margin-top: 6px;
-            color: #777;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .profile-card {
             background: white;
             padding: 25px;
             margin-bottom: 20px;
-            border: 1px solid #ddd;
+            border: 1px solid #e2e8f0;
             border-radius: 7px;
             box-shadow: 0 2px 8px rgba(0,0,0,.04);
         }
 
         .profile-card h2 {
             margin-top: 0;
-            color: #174a7c;
+            color: #0b2342;
             font-size: 19px;
+            font-weight: 700;
         }
 
         .profile-card p.description {
-            color: #777;
-            font-size: 13px;
+            color: #475569;
+            font-size: 13.5px;
+            font-weight: 500;
         }
 
         .form-group {
@@ -60,54 +66,58 @@
         .form-label {
             display: block;
             margin-bottom: 6px;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
-            color: #444;
+            color: #0f172a;
         }
 
         .form-input {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #ccc;
+            border: 1px solid #cbd5e1;
             border-radius: 5px;
             font-size: 14px;
+            font-weight: 500;
+            color: #0f172a;
             box-sizing: border-box;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #2878b5;
-            box-shadow: 0 0 0 2px rgba(40,120,181,.10);
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37,99,235,.15);
         }
 
         .save-button {
-            background: #2878b5;
+            background: #0b2342;
             color: white;
             border: none;
             padding: 10px 18px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
         }
 
         .save-button:hover {
-            background: #216696;
+            background: #17395f;
         }
 
         .success-message {
-            background: #eaf7ee;
-            color: #287a42;
-            border: 1px solid #c6e6d0;
+            background: #dcfce7;
+            color: #14532d;
+            border: 1px solid #bbf7d0;
             padding: 10px 14px;
             border-radius: 5px;
             margin-bottom: 20px;
-            font-size: 13px;
+            font-size: 13.5px;
+            font-weight: 600;
         }
 
         .error-message {
-            color: #b42318;
-            font-size: 12px;
+            color: #dc2626;
+            font-size: 12.5px;
+            font-weight: 600;
             margin-top: 5px;
         }
 
@@ -132,7 +142,7 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: #174a7c;
+            background: #0b2342;
             color: white;
             display: flex;
             align-items: center;
@@ -142,8 +152,9 @@
         }
 
         .profile-picture-info {
-            color: #777;
-            font-size: 12px;
+            color: #475569;
+            font-size: 12.5px;
+            font-weight: 500;
         }
 
         @media (max-width: 600px) {

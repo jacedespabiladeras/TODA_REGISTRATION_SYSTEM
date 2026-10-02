@@ -121,9 +121,6 @@
                                         Reset
                                     </a>
                                 @endif
-                                <button type="button" class="btn btn-success d-flex align-items-center gap-1.5 text-nowrap px-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-                                    <i class="bi bi-plus-lg"></i> Add Member
-                                </button>
                             </div>
                         </form>
                     </div>
@@ -136,7 +133,7 @@
                             <i class="bi bi-people"></i> Registered Members List
                         </h5>
                         <button type="button" class="btn btn-sm btn-success d-flex align-items-center gap-1.5" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-                            <i class="bi bi-plus-lg"></i> + Add Member
+                            <i class="bi bi-plus-lg"></i> Add Member
                         </button>
                     </div>
                     <div class="card-body p-0">

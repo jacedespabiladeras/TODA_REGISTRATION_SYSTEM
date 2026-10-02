@@ -6,6 +6,8 @@ use App\Models\Driver;
 use App\Models\Operator;
 use App\Models\Franchise;
 use App\Models\Vehicle;
+use App\Models\Todo;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -116,7 +118,8 @@ class DashboardController extends Controller
                     'name_id' => $driver->first_name . ' ' . $driver->last_name . ' (' . $driver->driver_id . ')',
                     'expiration_date' => $expiration->format('M. d, Y'),
                     'days_remaining' => $daysRemaining,
-                    'status' => 'Expiring'
+                    'status' => 'Expiring',
+                    'link' => route('drivers.show', $driver->id)
                 ];
             });
 
@@ -132,7 +135,8 @@ class DashboardController extends Controller
                     'name_id' => $vehicle->plate_number . ' (' . $vehicle->vehicle_id . ')',
                     'expiration_date' => $expiration->format('M. d, Y'),
                     'days_remaining' => $daysRemaining,
-                    'status' => 'Expiring'
+                    'status' => 'Expiring',
+                    'link' => route('vehicles.show', $vehicle->id)
                 ];
             });
 
@@ -147,7 +151,8 @@ class DashboardController extends Controller
                     'name_id' => $franchise->franchise_number,
                     'expiration_date' => $expiration->format('M. d, Y'),
                     'days_remaining' => $daysRemaining,
-                    'status' => 'Expiring'
+                    'status' => 'Expiring',
+                    'link' => route('franchises.show', $franchise->id)
                 ];
             });
 
@@ -157,6 +162,71 @@ class DashboardController extends Controller
             ->concat($expiringFranchisesList)
             ->sortBy('days_remaining')
             ->values();
+
+        // -------------------------------------------------------------
+        // MONTHLY TRENDS (LAST 6 MONTHS)
+        // -------------------------------------------------------------
+        $monthLabels = [];
+        $driverTrend = [];
+        $franchiseTrend = [];
+        $vehicleTrend = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $date = now()->subMonths($i);
+            $monthStart = $date->copy()->startOfMonth();
+            $monthEnd = $date->copy()->endOfMonth();
+            $label = $date->format('M Y');
+            $monthLabels[] = $label;
+
+            $driverTrend[] = Driver::whereBetween('created_at', [$monthStart, $monthEnd])->count();
+            $franchiseTrend[] = Franchise::whereBetween('created_at', [$monthStart, $monthEnd])->count();
+            $vehicleTrend[] = Vehicle::whereBetween('created_at', [$monthStart, $monthEnd])->count();
+        }
+
+        // Active rate calculation
+        $totalEntities = $totalFranchises + $totalDrivers + $totalVehicles;
+        $totalActive = $activeFranchises + $activeDrivers + $activeVehicles;
+        $activeRatePercentage = $totalEntities > 0 ? (int) round(($totalActive / $totalEntities) * 100) : 100;
+
+        // -------------------------------------------------------------
+        // RECENT REGISTRATIONS
+        // -------------------------------------------------------------
+        $recentDrivers = Driver::latest()->take(3)->get();
+        $recentFranchises = Franchise::with(['operator', 'vehicle'])->latest()->take(3)->get();
+        $recentVehicles = Vehicle::latest()->take(3)->get();
+
+        // -------------------------------------------------------------
+        // TO DO'S / WEEKLY TASKS
+        // -------------------------------------------------------------
+        $user = auth()->user();
+        $weekStart = now()->startOfWeek(Carbon::MONDAY);
+        $weekEnd = now()->endOfWeek(Carbon::SUNDAY);
+        $currentWeekFormatted = $weekStart->format('F d') . ' – ' . $weekEnd->format('F d, Y');
+
+        $staffMembers = User::whereHas('role', function($q) {
+            $q->where('name', 'staff');
+        })->orWhere('role_id', 2)->orderBy('name')->get();
+
+        if ($user->role?->name === 'admin') {
+            $todos = Todo::with(['assignedUser', 'creator'])
+                ->orderByRaw("CASE WHEN status = 'pending' THEN 1 ELSE 2 END")
+                ->orderBy('deadline', 'asc')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $todos = Todo::with('creator')
+                ->where('assigned_to', $user->id)
+                ->orderByRaw("CASE WHEN status = 'pending' THEN 1 ELSE 2 END")
+                ->orderBy('deadline', 'asc')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        $todoStats = [
+            'total' => $todos->count(),
+            'pending' => $todos->where('status', 'pending')->count(),
+            'completed' => $todos->where('status', 'completed')->count(),
+        ];
 
         // Bundle data for compact passing to the view
         $stats = [
@@ -185,10 +255,25 @@ class DashboardController extends Controller
                 'inactive' => $inactiveFranchises,
             ],
             'upcomingExpirations' => $upcomingExpirations,
+            'activeRate' => $activeRatePercentage,
+            'trends' => [
+                'labels' => $monthLabels,
+                'drivers' => $driverTrend,
+                'franchises' => $franchiseTrend,
+                'vehicles' => $vehicleTrend,
+            ],
+            'recent' => [
+                'drivers' => $recentDrivers,
+                'franchises' => $recentFranchises,
+                'vehicles' => $recentVehicles,
+            ],
+            'todos' => $todos,
+            'todoStats' => $todoStats,
+            'currentWeekFormatted' => $currentWeekFormatted,
+            'staffMembers' => $staffMembers,
         ];
 
         // Determine user dashboard based on role
-        $user = auth()->user();
         if ($user->role?->name === 'admin') {
             return view('admin.dashboard', compact('stats'));
         } elseif ($user->role?->name === 'staff') {

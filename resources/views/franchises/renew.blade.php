@@ -114,7 +114,7 @@
                                     </div>
 
                                     {{-- REFERENCE NUMBER (OR #) --}}
-                                    <div class="col-md-6">
+                                    <div class="col-12">
                                         <label for="reference_number" class="form-label">
                                             Reference / Official Receipt (OR) Number
                                         </label>
@@ -128,29 +128,6 @@
                                         >
                                         @error('reference_number')
                                             <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    {{-- RENEWAL FEE --}}
-                                    <div class="col-md-6">
-                                        <label for="renewal_fee" class="form-label">
-                                            Renewal Fee (PHP)
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-white">₱</span>
-                                            <input 
-                                                type="number" 
-                                                step="0.01" 
-                                                min="0"
-                                                name="renewal_fee" 
-                                                id="renewal_fee" 
-                                                class="form-control @error('renewal_fee') is-invalid @enderror" 
-                                                placeholder="e.g. 500.00"
-                                                value="{{ old('renewal_fee') }}"
-                                            >
-                                        </div>
-                                        @error('renewal_fee')
-                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
 

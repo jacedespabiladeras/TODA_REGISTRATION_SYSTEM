@@ -192,7 +192,6 @@
                                         <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">New Expiration</th>
                                         <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Renewal Date</th>
                                         <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Reference (OR #)</th>
-                                        <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Fee (PHP)</th>
                                         <th class="py-3 text-uppercase text-muted text-end pe-4" style="font-size: 11px; font-weight: 700;">Processed By</th>
                                     </tr>
                                 </thead>
@@ -224,9 +223,6 @@
                                             <td>
                                                 <code>{{ $record->reference_number ?? '—' }}</code>
                                             </td>
-                                            <td>
-                                                {{ $record->renewal_fee ? '₱' . number_format($record->renewal_fee, 2) : '—' }}
-                                            </td>
                                             <td class="text-end pe-4">
                                                 <div class="fw-semibold">{{ $record->processedBy?->name ?? 'System' }}</div>
                                                 <small class="text-muted">{{ $record->created_at->format('M d, Y h:i A') }}</small>
@@ -234,7 +230,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center py-5 text-muted">
+                                            <td colspan="7" class="text-center py-5 text-muted">
                                                 <i class="bi bi-journal-x display-6 d-block mb-3 text-muted" style="opacity: 0.3;"></i>
                                                 No renewal transactions found.
                                             </td>

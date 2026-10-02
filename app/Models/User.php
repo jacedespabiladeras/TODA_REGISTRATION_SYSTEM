@@ -42,6 +42,16 @@ class User extends Authenticatable
         return $this->hasMany(FranchiseRenewal::class, 'processed_by');
     }
 
+    public function assignedTodos()
+    {
+        return $this->hasMany(Todo::class, 'assigned_to');
+    }
+
+    public function createdTodos()
+    {
+        return $this->hasMany(Todo::class, 'created_by');
+    }
+
     /**
      * Get the attributes that should be cast.
      *

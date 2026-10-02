@@ -10,6 +10,7 @@ use App\Http\Controllers\RenewalController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TodoController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -228,6 +229,15 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])
         ->name('reports.index');
 
+    /*
+    |--------------------------------------------------------------
+    | TO DO'S (COMPLETION TOGGLE)
+    |--------------------------------------------------------------
+    */
+
+    Route::patch('/todos/{todo}/toggle', [TodoController::class, 'toggleComplete'])
+        ->name('todos.toggle');
+
 });
 
 
@@ -241,6 +251,7 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
 | - Admin Dashboard
 | - Member Registration
 | - Reports Output
+| - TO DO'S Management (Create, Update, Delete)
 |
 */
 
@@ -254,6 +265,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin', [\App\Http\Controllers\DashboardController::class, 'index'])
         ->name('admin.dashboard');
+
+    /*
+    |--------------------------------------------------------------
+    | TO DO'S MANAGEMENT
+    |--------------------------------------------------------------
+    */
+
+    Route::post('/todos', [TodoController::class, 'store'])
+        ->name('todos.store');
+
+    Route::put('/todos/{todo}', [TodoController::class, 'update'])
+        ->name('todos.update');
+
+    Route::delete('/todos/{todo}', [TodoController::class, 'destroy'])
+        ->name('todos.destroy');
 
 
     /*

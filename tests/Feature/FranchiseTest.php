@@ -171,7 +171,6 @@ test('franchise details page displays profile, operator, vehicle, driver, and re
         'new_expiration_date' => now()->addMonths(6)->toDateString(),
         'renewal_date' => now()->subYear()->addDays(5)->toDateString(),
         'reference_number' => 'OR-2025-11111',
-        'renewal_fee' => 500.00,
         'remarks' => 'First renewal',
         'processed_by' => $this->staffUser->id,
     ]);
@@ -275,8 +274,7 @@ test('franchise renewal updates expiration, preserves history and logs processor
             'renewal_date' => $renewalDate,
             'new_expiration_date' => $newExpiration,
             'reference_number' => 'OR-2026-99999',
-            'renewal_fee' => 750.50,
-            'remarks' => 'Annual registration renewal paid in full.',
+            'remarks' => 'Annual registration renewal completed.',
         ]);
 
     $response->assertRedirect(route('franchises.show', $franchise->id));
@@ -295,7 +293,6 @@ test('franchise renewal updates expiration, preserves history and logs processor
     expect($renewal->new_expiration_date->toDateString())->toBe($newExpiration);
     expect($renewal->renewal_date->toDateString())->toBe($renewalDate);
     expect($renewal->reference_number)->toBe('OR-2026-99999');
-    expect((float) $renewal->renewal_fee)->toBe(750.50);
     expect($renewal->processed_by)->toBe($this->staffUser->id);
 
     expect($franchise->renewals->count())->toBe(1);
@@ -318,7 +315,6 @@ test('franchise renewal hub displays due franchises and audit logs', function ()
         'new_expiration_date' => now()->addDays(5)->toDateString(),
         'renewal_date' => now()->toDateString(),
         'reference_number' => 'OR-LOG-8888',
-        'renewal_fee' => 600.00,
         'processed_by' => $this->staffUser->id,
     ]);
 

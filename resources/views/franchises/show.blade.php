@@ -239,7 +239,6 @@
                                                     <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">New Expiration</th>
                                                     <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Renewal Date</th>
                                                     <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Reference / OR #</th>
-                                                    <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Fee (PHP)</th>
                                                     <th class="py-3 text-uppercase text-muted" style="font-size: 11px; font-weight: 700;">Remarks</th>
                                                     <th class="py-3 text-uppercase text-muted text-end pe-4" style="font-size: 11px; font-weight: 700;">Processed By</th>
                                                 </tr>
@@ -263,9 +262,6 @@
                                                         </td>
                                                         <td>
                                                             <code>{{ $renewal->reference_number ?? '—' }}</code>
-                                                        </td>
-                                                        <td>
-                                                            {{ $renewal->renewal_fee ? '₱' . number_format($renewal->renewal_fee, 2) : '—' }}
                                                         </td>
                                                         <td>
                                                             <span class="text-muted">{{ $renewal->remarks ?? 'None' }}</span>

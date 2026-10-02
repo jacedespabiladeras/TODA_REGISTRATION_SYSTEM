@@ -746,7 +746,7 @@
             border-radius: 6px;
             border: none;
             background: transparent;
-            color: #64748b;
+            color: #334155;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
@@ -788,7 +788,8 @@
 
         .settings-card-subtitle {
             font-size: 12.5px;
-            color: #64748b;
+            color: #475569;
+            font-weight: 500;
             margin: 0;
         }
 
@@ -864,7 +865,8 @@
 
         .theme-select-desc {
             font-size: 12.5px;
-            color: #64748b;
+            color: #475569;
+            font-weight: 500;
             line-height: 1.4;
         }
 
